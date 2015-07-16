@@ -44,10 +44,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * A resource of message.
  */
 @Path("/commits")
-public class Commits {
+public class CommitAPI {
     private final ActiveObjects ao;
 
-    Commits(ActiveObjects ao) {
+    CommitAPI(ActiveObjects ao) {
         this.ao = checkNotNull(ao);
     }
 
@@ -57,7 +57,12 @@ public class Commits {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getMessage(@PathParam("commitHash") final String commitHash) {
         Commit commit = firstOf(ao.find(Commit.class, "\"COMMIT_HASH\" = ?", commitHash));
-        String coverage = commit.getCoverage();
+        String coverage;
+        if (commit != null) {
+            coverage = commit.getCoverage();
+        } else {
+            coverage = "0";
+        }
         return Response.ok(new CommitsModel(commitHash, coverage)).build();
     }
 
