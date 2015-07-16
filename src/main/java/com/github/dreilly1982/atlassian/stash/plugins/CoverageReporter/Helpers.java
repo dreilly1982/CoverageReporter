@@ -24,32 +24,15 @@
 
 package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
-import com.atlassian.activeobjects.external.ActiveObjects;
-import net.java.ao.Query;
-import static com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.Helpers.firstOf;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-public class CommitServiceImpl implements CommitService {
-    private final ActiveObjects ao;
-
-    public CommitServiceImpl(ActiveObjects ao) {
-        this.ao = checkNotNull(ao);
-    }
-
-    @Override
-    public Commit setCoverage(String commitHash, String coverage) {
-        final Commit commit = ao.create(Commit.class);
-        commit.setCommitHash(commitHash);
-        commit.setCoverage(coverage);
-        commit.save();
-        return commit;
-    }
-
-    @Override
-    public String getCoverage(String commitHash) {
-        Commit commit = firstOf(ao.find(Commit.class, Query.select().where("COMMIT_HASH = ?", commitHash)));
-        String coverage = commit == null ? "0" : commit.getCoverage();
-        return coverage;
+/**
+ * Created by dreilly on 7/16/15.
+ */
+public class Helpers {
+    public static <T> T firstOf(T[] array) {
+        if (array.length > 0) {
+            return array[0];
+        } else {
+            return null;
+        }
     }
 }

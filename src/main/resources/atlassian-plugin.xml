@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  ~ The MIT License (MIT)
+  ~
+  ~ Copyright (c) 2015 Don Reilly<dreilly1982@gmail.com>
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
 <atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+
   <plugin-info>
     <description>${project.description}</description>
     <version>${project.version}</version>
@@ -8,20 +33,51 @@
     <param name="plugin-icon">images/pluginIcon.png</param>
     <param name="plugin-logo">images/pluginLogo.png</param>
   </plugin-info>
+
   <!-- import from the product container -->
   <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
+
   <resource type="i18n" name="i18n" location="com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter"/>
-  <rest name="Commits" i18n-name-key="commits.name" key="commits" path="/commits" version="1.0">
+
+  <rest name="Commits" i18n-name-key="commits.name" key="commits" path="/coverage" version="1.0">
     <description key="commits.description">The Commits Plugin</description>
   </rest>
+
   <component key="tx-processor" name="Transactional Annotation Processor" class="com.atlassian.activeobjects.external.TransactionalAnnotationProcessor" >
     <description>Process @Transactional annotations.</description>
   </component>
+
   <ao key="ao-module">
     <description>The module configuring the Active Objects service used by this plugin</description>
     <entity>com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.Commit</entity>
   </ao>
+
   <component-import key="ao" name="Active Objects service" interface="com.atlassian.activeobjects.external.ActiveObjects">
     <description>Component to access Active Objects functionality from the plugin</description>
   </component-import>
+
+  <web-resource key="pr-overview-resources">
+
+    <transformation extension="soy">
+      <transformer key="soyTransformer" />
+    </transformation>
+
+    <transformation extension="less">
+      <transformer key="lessTransformer" />
+    </transformation>
+
+    <resource type="download" name="pull-request-overview.soy.js" location="/pull-request-overview.soy" />
+    <resource type="download" name="pull-request-overview.js" location="/pull-request-overview.js" />
+    <resource type="download" name="pull-request-overview.css" location="/pull-request-overview.less" />
+
+    <dependency>com.atlassian.auiplugin:ajs</dependency>
+    <dependency>com.atlassian.stash.stash-web-api:pull-request-web-panels</dependency>
+  </web-resource>
+
+  <client-web-panel name="Coverage Report" key="pr-overview-coverage-panel" location="stash.pull-request.related-entities" weight="2000">
+    <client-context-provider>com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.getCoverageReport</client-context-provider>
+    <resource name="view" type="soy" location="com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter:pr-overview-resources/com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.prOverviewPanel" />
+    <dependency>com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter:pr-overview-resources</dependency>
+  </client-web-panel>
+
 </atlassian-plugin>
