@@ -31,7 +31,6 @@ import java.util.Map;
 
 @Preload
 public interface Commit extends Entity {
-    String getCommitHash();
     void setCommitHash(String commitHash);
     String getCoverage();
     void setCoverage(String coverage);

@@ -24,9 +24,6 @@
 
 package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
-import com.atlassian.activeobjects.external.ActiveObjects;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "commit")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -38,7 +35,7 @@ public class CommitsModel {
     @XmlElement(name = "coverage")
     private String coverage;
 
-    public CommitsModel() {} // $COVERAGE-IGNORE$
+    public CommitsModel() {}
 
     public CommitsModel(String commitHash, String coverage) {
         this.commitHash = commitHash;

@@ -24,9 +24,6 @@
 
 package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
-/**
- * Created by dreilly on 7/16/15.
- */
 public class Helpers {
     public static <T> T firstOf(T[] array) {
         if (array.length > 0) {

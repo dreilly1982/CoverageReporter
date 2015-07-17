@@ -24,8 +24,11 @@
 
 package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
+import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.activeobjects.test.TestActiveObjects;
 import net.java.ao.EntityManager;
+import net.java.ao.test.jdbc.Data;
+import net.java.ao.test.jdbc.DatabaseUpdater;
 import net.java.ao.test.junit.ActiveObjectsJUnitRunner;
 import org.junit.After;
 import org.junit.Before;
@@ -35,13 +38,19 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 @RunWith(ActiveObjectsJUnitRunner.class)
+@Data(CommitServiceImplTest.CommitServiceImplTestDatabaseUpdater.class)
 public class CommitServiceImplTest {
     private EntityManager entityManager;
     private CommitServiceImpl commitService;
+    private ActiveObjects ao;
+
+    private static final String COMMIT_HASH = "FirstCommit";
+    private static final String COVERAGE = "12.3";
 
     @Before
     public void setUp() throws Exception {
         assertNotNull(entityManager);
+        ao = new TestActiveObjects(entityManager);
         commitService = new CommitServiceImpl(new TestActiveObjects(entityManager));
     }
 
@@ -52,11 +61,36 @@ public class CommitServiceImplTest {
 
     @Test
     public void testSetCoverage() throws Exception {
+        final String coverage = "32.3";
+        final String commitHash = "supercommithash";
+        ao.migrate(Commit.class);
+        assertEquals(1, ao.find(Commit.class).length);
 
+        final Commit commit = commitService.setCoverage(commitHash, coverage);
+        assertFalse(commit.getID() == 0);
+
+        ao.flushAll();
+
+        final Commit[] commits = ao.find(Commit.class);
+        assertEquals(2, commits.length);
+        assertEquals(coverage, commits[1].getCoverage());
     }
 
     @Test
     public void testGetCoverage() throws Exception {
+        final String coverage = commitService.getCoverage(COMMIT_HASH);
+        assertEquals(COVERAGE, coverage);
+    }
 
+    public static class CommitServiceImplTestDatabaseUpdater implements DatabaseUpdater {
+        @Override
+        public void update(EntityManager em) throws Exception {
+            em.migrate(Commit.class);
+
+            final Commit commit = em.create(Commit.class);
+            commit.setCommitHash(COMMIT_HASH);
+            commit.setCoverage(COVERAGE);
+            commit.save();
+        }
     }
 }
