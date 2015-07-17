@@ -1,5 +1,8 @@
 language: java
 
+before_install: "git clone -b `git config --get remote.origin.url` target/maven"
+script: "mvn deploy --settings target/maven/settings.xml"
+
 after_success:
   - mvn clean test jacoco:report coveralls:report
 
