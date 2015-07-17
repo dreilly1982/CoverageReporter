@@ -2,6 +2,8 @@ language: java
 jdk:
 - oraclejdk8
 - oraclejdk7
+- openjdk7
+- openjdk8
 before_install:
 - sudo apt-get update
 - sudo apt-get install apt-transport-https
@@ -34,3 +36,6 @@ env:
     - STASH_VERSION=3.10.2
     - STASH_VERSION=3.10.3
     - STASH_VERSION=3.11.0
+cache:
+  directories:
+    - $HOME/.m2
