@@ -38,8 +38,7 @@ public class CommitsModel {
     @XmlElement(name = "coverage")
     private String coverage;
 
-    public CommitsModel() {
-    }
+    public CommitsModel() {} // $COVERAGE-IGNORE$
 
     public CommitsModel(String commitHash, String coverage) {
         this.commitHash = commitHash;

@@ -10,11 +10,11 @@ before_install:
 - sudo apt-get update
 - sudo apt-get install atlassian-plugin-sdk
 install:
-- atlas-mvn -q install -Dstash.version=3.7.1 -Dstash.data.version=3.7.1 -Damps.version=5.0.13
-- atlas-mvn -q install
+- atlas-mvn install -Dstash.version=3.7.1 -Dstash.data.version=3.7.1 -Damps.version=5.0.13
+- atlas-mvn install
 script:
-- atlas-package -q -Dstash.version=3.7.1 -Dstash.data.version=3.7.1 -Damps.version=5.0.13
-- atlas-package -q
+- atlas-package -Dstash.version=3.7.1 -Dstash.data.version=3.7.1 -Damps.version=5.0.13
+- atlas-package
 after_success:
 - atlas-mvn clean test jacoco:report coveralls:report
 env:
