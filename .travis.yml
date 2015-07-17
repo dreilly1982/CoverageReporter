@@ -2,8 +2,6 @@ language: java
 jdk:
 - oraclejdk8
 - oraclejdk7
-- openjdk7
-- openjdk8
 before_install:
 - sudo apt-get update
 - sudo apt-get install apt-transport-https
@@ -23,32 +21,6 @@ env:
   global:
     secure: L0PQlwvR/FWpkx5V/9/EVJ9DhIJZ1fHQZCaCdKBxLiwdbXkISEuRWaAZS4yu+RfkXk61z8qnnGsBm0K21YsMtAlkkwIPWi3HMpU2oRLN3YEqo/gNIpTUKc6XdosQCwwMtFUCYauL/mkzB9dz0jM44ObEvRrNvzhyVtpGas9ZoZs/lObLy4VhzhmJrKpHaPTtHmAKoHC0oVCqnNXWJ6BxauI6Ac/C+uFBwZWErc6f9/BPd0LTeYByZOWgB1Yo9UbY712sVMJs/HBTOMz3tf+DX0OMjCKrTWNOmcJX7U6O/+v4/iqqo7r0/abz4oPD02cwdtRivI2vUF6njcylnOmzeiYgL0n7IPLalc0OD6ztu73CYv7fGQHC01v8CcwDbK8QtHDvJep8JR9fe7RxL56KygrF+LbUvouBnuNfBjM3wKTyC7bsBZ7PWqgEoEDMBfUSVUQX86FQTgO0nBahQf0k2DLb4Sk0Xo+nphMCm4fg2iaZNx+JBj2xG0nBWPUvHjXhUlQliODTXk4m7tTUKj1hqvvr+D16cfnKc9AQimbFvXrhCgItYbhP+gz/RuJpEOege2SLf+iJDvhonl8KEUTdCYLXxovTQgt/PRsfJuTBJHZnOPuAqCTZ77s8jIk4kA12JxPCta1+KijMO2lsC+WHG2W5YPtuGSPFrU7piIKsEE0=
   matrix:
-    - STASH_VERSION=3.0.1
-    - STASH_VERSION=3.0.4
-    - STASH_VERSION=3.0.5
-    - STASH_VERSION=3.0.6
-    - STASH_VERSION=3.0.7
-    - STASH_VERSION=3.0.8
-    - STASH_VERSION=3.1.0
-    - STASH_VERSION=3.1.1
-    - STASH_VERSION=3.1.3
-    - STASH_VERSION=3.1.4
-    - STASH_VERSION=3.1.5
-    - STASH_VERSION=3.1.7
-    - STASH_VERSION=3.2.0
-    - STASH_VERSION=3.2.2
-    - STASH_VERSION=3.2.4
-    - STASH_VERSION=3.2.5
-    - STASH_VERSION=3.2.7
-    - STASH_VERSION=3.3.0
-    - STASH_VERSION=3.3.1
-    - STASH_VERSION=3.3.2
-    - STASH_VERSION=3.3.3
-    - STASH_VERSION=3.3.5
-    - STASH_VERSION=3.4.0
-    - STASH_VERSION=3.4.1
-    - STASH_VERSION=3.4.3
-    - STASH_VERSION=3.4.5
     - STASH_VERSION=3.5.0
     - STASH_VERSION=3.5.1
     - STASH_VERSION=3.6.0
