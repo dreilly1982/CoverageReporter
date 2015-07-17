@@ -16,3 +16,5 @@ install:
 script:
   - atlas-package -q -Dstash.version=3.7.1 -Dstash.data.version=3.7.1 -Damps.version=5.0.13
   - atlas-package -q
+after_success:
+  - mvn clean test jacoco:report coveralls:report
