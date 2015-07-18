@@ -38,7 +38,3 @@ env:
     - STASH_VERSION=3.10.2
     - STASH_VERSION=3.10.3
     - STASH_VERSION=3.11.0
-cache:
-  directories:
-    - $HOME/.m2
-    - $ATLAS_HOME/repository

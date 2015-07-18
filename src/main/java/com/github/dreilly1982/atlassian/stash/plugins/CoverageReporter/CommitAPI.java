@@ -26,17 +26,11 @@ package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import static com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.Helpers.firstOf;
 
 import com.atlassian.activeobjects.external.ActiveObjects;
-import com.atlassian.sal.api.transaction.TransactionCallback;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -46,23 +40,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Path("/commits")
 public class CommitAPI {
     private final ActiveObjects ao;
+    private CommitService commitService;
 
-    CommitAPI(ActiveObjects ao) {
+    public CommitAPI(ActiveObjects ao) {
         this.ao = checkNotNull(ao);
+        this.commitService = new CommitServiceImpl(ao);
     }
 
     @GET
     @AnonymousAllowed
     @Path("/{commitHash}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getMessage(@PathParam("commitHash") final String commitHash) {
-        Commit commit = firstOf(ao.find(Commit.class, "\"COMMIT_HASH\" = ?", commitHash));
-        String coverage;
-        if (commit != null) {
-            coverage = commit.getCoverage();
-        } else {
-            coverage = "0";
-        }
+    public Response getCoverage(@PathParam("commitHash") final String commitHash) {
+        String coverage = commitService.getCoverage(commitHash);
         return Response.ok(new CommitsModel(commitHash, coverage)).build();
     }
 
@@ -71,19 +61,7 @@ public class CommitAPI {
     @Path("/{commitHash}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response setCoverage(@PathParam("commitHash") final String commitHash, final String coverage) {
-        return ao.executeInTransaction(new TransactionCallback<Response>() {
-            @Override
-            public Response doInTransaction() {
-                Commit existing = firstOf(ao.find(Commit.class, "\"COMMIT_HASH\" = ?", commitHash));
-                if (existing != null) {
-                    ao.delete(existing);
-                }
-                Commit commit = ao.create(Commit.class);
-                commit.setCommitHash(commitHash);
-                commit.setCoverage(coverage);
-                commit.save();
-                return Response.status(Response.Status.CREATED).build();
-            }
-        });
+        commitService.setCoverage(commitHash, coverage);
+        return Response.status(Response.Status.CREATED).build();
     }
 }

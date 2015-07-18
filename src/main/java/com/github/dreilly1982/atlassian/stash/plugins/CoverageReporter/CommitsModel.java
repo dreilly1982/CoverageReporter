@@ -25,6 +25,7 @@
 package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
 import javax.xml.bind.annotation.*;
+
 @XmlRootElement(name = "commit")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CommitsModel {
@@ -40,5 +41,9 @@ public class CommitsModel {
     public CommitsModel(String commitHash, String coverage) {
         this.commitHash = commitHash;
         this.coverage = coverage;
+    }
+
+    public String getCoverage() {
+        return coverage;
     }
 }

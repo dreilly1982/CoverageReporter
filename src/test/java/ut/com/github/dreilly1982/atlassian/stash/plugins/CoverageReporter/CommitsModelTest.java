@@ -22,12 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
+package ut.com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
-import com.atlassian.activeobjects.tx.Transactional;
+import com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CommitsModel;
+import org.junit.Test;
 
-@Transactional
-public interface CommitService {
-    Commit setCoverage(String commitHash, String coverage);
-    String getCoverage(String commitHash);
+import static org.junit.Assert.*;
+
+public class CommitsModelTest {
+
+    @Test
+    public void testCoverage() throws Exception {
+        CommitsModel commitsModel = new CommitsModel();
+        assertSame(CommitsModel.class, commitsModel.getClass());
+    }
 }

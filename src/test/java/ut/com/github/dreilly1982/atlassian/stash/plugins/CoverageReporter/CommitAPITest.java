@@ -22,27 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
+package ut.com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
 import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.activeobjects.test.TestActiveObjects;
+import com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CommitAPI;
+import com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CommitsModel;
+
+import org.junit.Before;
+import org.junit.Test;
+import javax.ws.rs.core.Response;
+
+import static org.junit.Assert.*;
+
 import net.java.ao.EntityManager;
 import net.java.ao.test.jdbc.Data;
 import net.java.ao.test.jdbc.DatabaseUpdater;
 import net.java.ao.test.junit.ActiveObjectsJUnitRunner;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+
+import com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.Commit;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
-
 @RunWith(ActiveObjectsJUnitRunner.class)
-@Data(CommitServiceImplTest.CommitServiceImplTestDatabaseUpdater.class)
-public class CommitServiceImplTest {
+@Data(CommitAPITest.CommitAPITestDatabaseUpdater.class)
+public class CommitAPITest {
+
     private EntityManager entityManager;
-    private CommitServiceImpl commitService;
     private ActiveObjects ao;
+    private CommitAPI resource;
 
     private static final String COMMIT_HASH = "FirstCommit";
     private static final String COVERAGE = "12.3";
@@ -51,43 +58,29 @@ public class CommitServiceImplTest {
     public void setUp() throws Exception {
         assertNotNull(entityManager);
         ao = new TestActiveObjects(entityManager);
-        commitService = new CommitServiceImpl(new TestActiveObjects(entityManager));
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
-    @Test
-    public void testSetCoverage() throws Exception {
-        final String coverage = "32.3";
-        final String commitHash = "supercommithash";
-        ao.migrate(Commit.class);
-        assertEquals(1, ao.find(Commit.class).length);
-
-        final Commit commit = commitService.setCoverage(commitHash, coverage);
-        assertFalse(commit.getID() == 0);
-
-        ao.flushAll();
-
-        final Commit[] commits = ao.find(Commit.class);
-        assertEquals(2, commits.length);
-        assertEquals(coverage, commits[1].getCoverage());
+        resource = new CommitAPI(ao);
     }
 
     @Test
     public void testGetCoverage() throws Exception {
-        final String coverage = commitService.getCoverage(COMMIT_HASH);
+        Response response = resource.getCoverage(COMMIT_HASH);
+        final CommitsModel message = (CommitsModel) response.getEntity();
+        String coverage = message.getCoverage();
         assertEquals(COVERAGE, coverage);
     }
 
-    public static class CommitServiceImplTestDatabaseUpdater implements DatabaseUpdater {
-        @Override
-        public void update(EntityManager em) throws Exception {
-            em.migrate(Commit.class);
+    @Test
+    public void testSetCoverage() throws Exception {
+        Response response = resource.setCoverage("TestCommit", "12.5");
+        assertEquals(Response.status(Response.Status.CREATED).build().getStatus(), response.getStatus());
+        System.out.println("Assertion Complete");
+    }
 
-            final Commit commit = em.create(Commit.class);
+    public static class CommitAPITestDatabaseUpdater implements DatabaseUpdater {
+        @Override
+        public void update(final EntityManager em) throws Exception {
+            em.migrate(Commit.class);
+            Commit commit = em.create(Commit.class);
             commit.setCommitHash(COMMIT_HASH);
             commit.setCoverage(COVERAGE);
             commit.save();

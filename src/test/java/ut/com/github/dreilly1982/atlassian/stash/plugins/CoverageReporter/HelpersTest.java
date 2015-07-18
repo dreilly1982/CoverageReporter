@@ -22,12 +22,19 @@
  * THE SOFTWARE.
  */
 
-package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
+package ut.com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
-import com.atlassian.activeobjects.tx.Transactional;
+import org.junit.Test;
+import static com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.Helpers.firstOf;
 
-@Transactional
-public interface CommitService {
-    Commit setCoverage(String commitHash, String coverage);
-    String getCoverage(String commitHash);
+import static org.junit.Assert.*;
+
+public class HelpersTest {
+
+    @Test
+    public void testFirstOf() throws Exception {
+        String[] strArray = new String[0];
+        String firstOf = firstOf(strArray);
+        assertNull(firstOf);
+    }
 }
