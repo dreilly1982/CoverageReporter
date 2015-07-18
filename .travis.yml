@@ -10,13 +10,13 @@ before_install:
 - sudo apt-get update
 - sudo apt-get install atlassian-plugin-sdk
 install:
-- atlas-mvn install -Dstash.version=$STASH_VERSION -Dstash.data.version=$STASH_VERSION -Damps.version=5.0.13
-- atlas-mvn install
+- atlas-mvn -q install -Dstash.version=$STASH_VERSION -Dstash.data.version=$STASH_VERSION -Damps.version=5.0.13
+- atlas-mvn -q install
 script:
-- atlas-package -Dstash.version=$STASH_VERSION -Dstash.data.version=$STASH_VERSION -Damps.version=5.0.13
-- atlas-package
+- atlas-package -q -Dstash.version=$STASH_VERSION -Dstash.data.version=$STASH_VERSION -Damps.version=5.0.13
+- atlas-package -q
 after_success:
-- atlas-mvn clean test jacoco:report coveralls:report
+- atlas-mvn -q clean test jacoco:report coveralls:report
 env:
   global:
     secure: L0PQlwvR/FWpkx5V/9/EVJ9DhIJZ1fHQZCaCdKBxLiwdbXkISEuRWaAZS4yu+RfkXk61z8qnnGsBm0K21YsMtAlkkwIPWi3HMpU2oRLN3YEqo/gNIpTUKc6XdosQCwwMtFUCYauL/mkzB9dz0jM44ObEvRrNvzhyVtpGas9ZoZs/lObLy4VhzhmJrKpHaPTtHmAKoHC0oVCqnNXWJ6BxauI6Ac/C+uFBwZWErc6f9/BPd0LTeYByZOWgB1Yo9UbY712sVMJs/HBTOMz3tf+DX0OMjCKrTWNOmcJX7U6O/+v4/iqqo7r0/abz4oPD02cwdtRivI2vUF6njcylnOmzeiYgL0n7IPLalc0OD6ztu73CYv7fGQHC01v8CcwDbK8QtHDvJep8JR9fe7RxL56KygrF+LbUvouBnuNfBjM3wKTyC7bsBZ7PWqgEoEDMBfUSVUQX86FQTgO0nBahQf0k2DLb4Sk0Xo+nphMCm4fg2iaZNx+JBj2xG0nBWPUvHjXhUlQliODTXk4m7tTUKj1hqvvr+D16cfnKc9AQimbFvXrhCgItYbhP+gz/RuJpEOege2SLf+iJDvhonl8KEUTdCYLXxovTQgt/PRsfJuTBJHZnOPuAqCTZ77s8jIk4kA12JxPCta1+KijMO2lsC+WHG2W5YPtuGSPFrU7piIKsEE0=
