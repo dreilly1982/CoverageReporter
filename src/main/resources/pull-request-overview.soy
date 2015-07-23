@@ -23,9 +23,13 @@
  */
 
 {namespace com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter}
-
+/**
+ * Renders coverage of commit
+ * @param coverage The coverage
+ */
 {template .prOverviewPanel}
     {call stash.template.pullRequest.relatedEntitiesWebPanel}
-
+        {param linkText: 'Coverage: ' + $coverage + '%' /}
+        {param linkHref: '#' /}
     {/call}
 {/template}

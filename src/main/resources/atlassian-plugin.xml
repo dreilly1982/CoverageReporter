@@ -56,6 +56,7 @@
     <description>Component to access Active Objects functionality from the plugin</description>
   </component-import>
 
+
   <web-resource key="pr-overview-resources">
 
     <transformation extension="soy">
@@ -66,16 +67,18 @@
       <transformer key="lessTransformer" />
     </transformation>
 
-    <resource type="download" name="pull-request-overview.soy.js" location="/pull-request-overview.soy" />
-    <resource type="download" name="pull-request-overview.js" location="/pull-request-overview.js" />
-    <resource type="download" name="pull-request-overview.css" location="/pull-request-overview.less" />
+    <resource type="download" name="pull-request-overview.soy.js" location="pull-request-overview.soy" />
+    <resource type="download" name="pull-request-overview.js" location="pull-request-overview.js" />
+    <!--<resource type="download" name="pull-request-overview.css" location="/pull-request-overview.less" />-->
 
     <dependency>com.atlassian.auiplugin:ajs</dependency>
     <dependency>com.atlassian.stash.stash-web-api:pull-request-web-panels</dependency>
   </web-resource>
 
   <client-web-panel name="Coverage Report" key="pr-overview-coverage-panel" location="stash.pull-request.related-entities" weight="2000">
-    <client-context-provider>com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.getCoverageReport</client-context-provider>
+    <context-provider class="com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CoverageContextProvider" />
+    <client-condition>ContextManager.hasCoverage</client-condition>
+    <client-context-provider>ContextManager.getCoverageReport</client-context-provider>
     <resource name="view" type="soy" location="com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter:pr-overview-resources/com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.prOverviewPanel" />
     <dependency>com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter:pr-overview-resources</dependency>
   </client-web-panel>

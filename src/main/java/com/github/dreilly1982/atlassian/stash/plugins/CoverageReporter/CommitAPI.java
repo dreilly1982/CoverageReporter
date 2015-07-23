@@ -58,10 +58,10 @@ public class CommitAPI {
 
     @POST
     @AnonymousAllowed
-    @Path("/{commitHash}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response setCoverage(@PathParam("commitHash") final String commitHash, final String coverage) {
-        commitService.setCoverage(commitHash, coverage);
+    @Path("/submit")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setCoverage(final CommitsModel commit) {
+        commitService.setCoverage(commit.getCommitHash(), commit.getCoverage());
         return Response.status(Response.Status.CREATED).build();
     }
 }

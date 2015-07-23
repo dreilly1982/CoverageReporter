@@ -71,9 +71,15 @@ public class CommitAPITest {
 
     @Test
     public void testSetCoverage() throws Exception {
-        Response response = resource.setCoverage("TestCommit", "12.5");
+        final String testCommitHash = "TestCommit";
+        final String testCoverage = "12.5";
+        final CommitsModel commit = new CommitsModel(testCommitHash, testCoverage);
+        Response response = resource.setCoverage(commit);
         assertEquals(Response.status(Response.Status.CREATED).build().getStatus(), response.getStatus());
-        System.out.println("Assertion Complete");
+        response = resource.getCoverage(testCommitHash);
+        final CommitsModel message = (CommitsModel) response.getEntity();
+        String coverage = message.getCoverage();
+        assertEquals(testCoverage, coverage);
     }
 
     public static class CommitAPITestDatabaseUpdater implements DatabaseUpdater {

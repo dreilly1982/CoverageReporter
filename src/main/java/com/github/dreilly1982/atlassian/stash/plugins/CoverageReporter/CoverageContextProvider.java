@@ -24,28 +24,26 @@
 
 package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
-import javax.xml.bind.annotation.*;
+import com.atlassian.plugin.PluginParseException;
+import com.atlassian.plugin.web.ContextProvider;
+import com.google.common.collect.ImmutableMap;
+import com.atlassian.stash.pull.PullRequest;
+import java.util.Map;
 
-@XmlRootElement(name = "commit")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class CommitsModel {
+public class CoverageContextProvider implements ContextProvider {
+    private CommitService commitService;
 
-    @XmlElement(name = "commitHash")
-    private String commitHash;
-
-    @XmlElement(name = "coverage")
-    private String coverage;
-
-    public CommitsModel() {}
-
-    public CommitsModel(String commitHash, String coverage) {
-        this.commitHash = commitHash;
-        this.coverage = coverage;
+    public CoverageContextProvider(CommitService commitService) {
+        this.commitService = commitService;
     }
 
-    public String getCoverage() {
-        return coverage;
-    }
+    @Override
+    public void init(Map<String, String> params) throws PluginParseException {}
 
-    public String getCommitHash() { return commitHash; }
+    @Override
+    public Map<String, Object> getContextMap(Map<String, Object> context) {
+        return ImmutableMap.<String, Object>builder()
+                .put("coverage", commitService.getCoverage(((PullRequest) context.get("pullRequest")).getToRef().getLatestCommit()))
+                .build();
+    }
 }

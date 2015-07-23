@@ -22,18 +22,13 @@
  * THE SOFTWARE.
  */
 
-package ut.com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
-import com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CommitsModel;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-public class CommitsModelTest {
-
-    @Test
-    public void testCoverage() throws Exception {
-        CommitsModel commitsModel = new CommitsModel();
-        assertSame(CommitsModel.class, commitsModel.getClass());
+var ContextManager = {
+    hasCoverage : function(context) {
+        return true;
+    },
+    getCoverageReport : function(context) {
+        var coverage = context.coverage;
+        return coverage;
     }
-}
+};
