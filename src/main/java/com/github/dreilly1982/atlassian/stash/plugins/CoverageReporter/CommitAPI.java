@@ -34,9 +34,6 @@ import com.atlassian.activeobjects.external.ActiveObjects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * A resource of message.
- */
 @Path("/commits")
 public class CommitAPI {
     private final ActiveObjects ao;

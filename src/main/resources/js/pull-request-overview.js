@@ -22,25 +22,13 @@
  * THE SOFTWARE.
  */
 
-
-var ContextManager = {
-    hasCoverage : function(context) {
-        return true;
-    },
-    getCoverageReport : function(context) {
-        var coverage = "18.53";
-        return coverage;
-    }
-};
-
 (function($) {
     window.com.github.dreilly1982.atlassian.stash.plugins = com.github.dreilly1982.atlassian.stash.plugins || {};
     com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter = com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter || {};
 
     function getCoverage(context) {
-        var coverageStat = "50.2";
         return {
-            coverage : coverageStat
+            coverage : context.coverage
         };
     }
 

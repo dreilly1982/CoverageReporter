@@ -29,6 +29,7 @@ import com.atlassian.activeobjects.test.TestActiveObjects;
 import com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CommitAPI;
 import com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CommitsModel;
 
+import net.java.ao.DBParam;
 import org.junit.Before;
 import org.junit.Test;
 import javax.ws.rs.core.Response;
@@ -70,15 +71,44 @@ public class CommitAPITest {
     }
 
     @Test
+    public void testGetCoverage_null() throws Exception {
+        Response response = resource.getCoverage("non_existent_commit");
+        final CommitsModel message = (CommitsModel) response.getEntity();
+        String coverage = message.getCoverage();
+        assertEquals("0", coverage);
+    }
+
+    @Test
     public void testSetCoverage() throws Exception {
         final String testCommitHash = "TestCommit";
         final String testCoverage = "12.5";
+
         final CommitsModel commit = new CommitsModel(testCommitHash, testCoverage);
         Response response = resource.setCoverage(commit);
         assertEquals(Response.status(Response.Status.CREATED).build().getStatus(), response.getStatus());
+
         response = resource.getCoverage(testCommitHash);
         final CommitsModel message = (CommitsModel) response.getEntity();
         String coverage = message.getCoverage();
+        assertEquals(testCoverage, coverage);
+    }
+
+    @Test
+    public void testSetCoverage_overwrite() throws Exception {
+        final String testCoverage = "13.25";
+
+        Response response = resource.getCoverage(COMMIT_HASH);
+        CommitsModel commit = (CommitsModel) response.getEntity();
+        String coverage = commit.getCoverage();
+        assertEquals(COVERAGE, coverage);
+
+        commit = new CommitsModel(COMMIT_HASH, testCoverage);
+        response = resource.setCoverage(commit);
+        assertEquals(Response.status(Response.Status.CREATED).build().getStatus(), response.getStatus());
+
+        response = resource.getCoverage(COMMIT_HASH);
+        commit = (CommitsModel) response.getEntity();
+        coverage = commit.getCoverage();
         assertEquals(testCoverage, coverage);
     }
 
@@ -86,8 +116,7 @@ public class CommitAPITest {
         @Override
         public void update(final EntityManager em) throws Exception {
             em.migrate(Commit.class);
-            Commit commit = em.create(Commit.class);
-            commit.setCommitHash(COMMIT_HASH);
+            Commit commit = em.create(Commit.class, new DBParam("COMMIT_HASH", COMMIT_HASH));
             commit.setCoverage(COVERAGE);
             commit.save();
         }

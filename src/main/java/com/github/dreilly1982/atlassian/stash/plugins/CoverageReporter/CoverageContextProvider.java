@@ -24,17 +24,21 @@
 
 package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
+import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.plugin.PluginParseException;
 import com.atlassian.plugin.web.ContextProvider;
 import com.google.common.collect.ImmutableMap;
 import com.atlassian.stash.pull.PullRequest;
 import java.util.Map;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CoverageContextProvider implements ContextProvider {
     private CommitService commitService;
+    private final ActiveObjects ao;
 
-    public CoverageContextProvider(CommitService commitService) {
-        this.commitService = commitService;
+    public CoverageContextProvider(ActiveObjects ao) {
+        this.ao = checkNotNull(ao);
+        this.commitService = new CommitServiceImpl(this.ao);
     }
 
     @Override
@@ -43,7 +47,7 @@ public class CoverageContextProvider implements ContextProvider {
     @Override
     public Map<String, Object> getContextMap(Map<String, Object> context) {
         return ImmutableMap.<String, Object>builder()
-                .put("coverage", commitService.getCoverage(((PullRequest) context.get("pullRequest")).getToRef().getLatestCommit()))
+                .put("coverage", commitService.getCoverage(((PullRequest) context.get("pullRequest")).getFromRef().getLatestCommit()))
                 .build();
     }
 }

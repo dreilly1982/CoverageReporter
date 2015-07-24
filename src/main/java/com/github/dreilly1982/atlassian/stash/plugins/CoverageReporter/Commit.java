@@ -26,10 +26,17 @@ package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
 import net.java.ao.Entity;
 import net.java.ao.Preload;
+import net.java.ao.schema.NotNull;
+import net.java.ao.schema.Unique;
 
 @Preload
 public interface Commit extends Entity {
+
+    @NotNull
+    @Unique
+    String getCommitHash();
     void setCommitHash(String commitHash);
+
     String getCoverage();
     void setCoverage(String coverage);
 }

@@ -25,6 +25,7 @@
 package com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter;
 
 import com.atlassian.activeobjects.external.ActiveObjects;
+import net.java.ao.DBParam;
 import net.java.ao.Query;
 import static com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.Helpers.firstOf;
 
@@ -39,8 +40,12 @@ public class CommitServiceImpl implements CommitService {
 
     @Override
     public Commit setCoverage(String commitHash, String coverage) {
-        final Commit commit = ao.create(Commit.class);
-        commit.setCommitHash(commitHash);
+        Commit commit = firstOf(ao.find(Commit.class, Query.select().where("COMMIT_HASH = ?", commitHash)));
+        if (commit == null) {
+            commit = ao.create(Commit.class, new DBParam("COMMIT_HASH", commitHash));
+        } else {
+            commit.setCommitHash(commitHash);
+        }
         commit.setCoverage(coverage);
         commit.save();
         return commit;
