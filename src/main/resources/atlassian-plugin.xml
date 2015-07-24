@@ -76,9 +76,10 @@
   </web-resource>
 
   <client-web-panel name="Coverage Report" key="pr-overview-coverage-panel" location="stash.pull-request.related-entities" weight="2000">
-    <context-provider class="com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CoverageContextProvider" />
-    <client-condition>ContextManager.hasCoverage</client-condition>
-    <client-context-provider>ContextManager.getCoverageReport</client-context-provider>
+    <!--<context-provider class="com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.CoverageContextProvider" />-->
+    <!--<client-condition>ContextManager.hasCoverage</client-condition>-->
+    <client-context-provider>com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.getCoverage</client-context-provider>
+    <label>Label</label>
     <resource name="view" type="soy" location="com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter:pr-overview-resources/com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.prOverviewPanel" />
     <dependency>com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter:pr-overview-resources</dependency>
   </client-web-panel>

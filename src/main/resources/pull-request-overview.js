@@ -28,7 +28,21 @@ var ContextManager = {
         return true;
     },
     getCoverageReport : function(context) {
-        var coverage = context.coverage;
+        var coverage = "18.53";
         return coverage;
     }
 };
+
+(function($) {
+    window.com.github.dreilly1982.atlassian.stash.plugins = com.github.dreilly1982.atlassian.stash.plugins || {};
+    com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter = com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter || {};
+
+    function getCoverage(context) {
+        var coverageStat = "50.2";
+        return {
+            coverage : coverageStat
+        };
+    }
+
+    com.github.dreilly1982.atlassian.stash.plugins.CoverageReporter.getCoverage = getCoverage;
+}(AJS.$));
